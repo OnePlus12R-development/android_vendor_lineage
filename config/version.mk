@@ -36,3 +36,17 @@ LINEAGE_VERSION := $(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR)-$(LINEAGE_V
 
 # Display version
 LINEAGE_DISPLAY_VERSION := $(PRODUCT_VERSION_MAJOR)-$(LINEAGE_VERSION_SUFFIX)
+
+# Signing
+ifeq (user,$(TARGET_BUILD_VARIANT))
+ifneq (,$(wildcard .android-certs/releasekey.pk8))
+PRODUCT_DEFAULT_DEV_CERTIFICATE := .android-certs/releasekey
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += ro.oem_unlock_supported=1
+endif
+ifneq (,$(wildcard .android-certs/verity.pk8))
+PRODUCT_VERITY_SIGNING_KEY := .android-certs/verity
+endif
+ifneq (,$(wildcard .android-certs/otakey.x509.pem))
+PRODUCT_OTA_PUBLIC_KEYS := .android-certs/otakey.x509.pem
+endif
+endif
